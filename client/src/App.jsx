@@ -32,14 +32,16 @@ const App = () => {
       <Routes>
         <Route path='/inventory/edit/:id' element={<EditInventory />}></Route>
         <Route path='/inventory/allInventory' element={<ShowInventory />}></Route>
+       
         <Route path='/inventory/create' element={<CreateInventory />}></Route>
         <Route path='/inventory/delete/:id' element={<DeleteInventory />}></Route>
         <Route path='/inventory/get/:id' element={<ReadOneInventory />}></Route>
         <Route path='/inventory/addItem/:id' element={<AddExistingInventory />}></Route>
         <Route path='/inventory/retrieveItem/:id' element={<RetrieveExistingInventory />}></Route>
-        <Route path='/inventory/InventoryDashboard' element={<InventoryDashboard />}></Route>
+        <Route path='/' element={<InventoryDashboard />}></Route>
+        {/* <Route path='/inventory/InventoryDashboard' element={<InventoryDashboard />}></Route> */}
         <Route path='/inventory/InventoryReport' element={<InventoryReport />}></Route>
-        <Route path='/dashboard' element={<Dashboard />}></Route>
+       
       </Routes>
     </>
   );

@@ -20,11 +20,12 @@ const ShowInventory = () => {
   const componentRef = useRef();
 
   // Function to handle search
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    setSearchQuery(e.target.value);
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8076/inventory?search=${searchQuery}`
+        `http://localhost:7788/inventory?search=${e.target.value}`
       );
       setInventory(response.data.data);
       setLoading(false);
@@ -42,7 +43,7 @@ const ShowInventory = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:8076/inventory")
+      .get("http://localhost:7788/inventory")
       .then((response) => {
         setInventory(response.data.data);
         setLoading(false);
@@ -108,7 +109,7 @@ const ShowInventory = () => {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:8076/inventory/${id}`)
+        axios.delete(`http://localhost:7788/inventory/${id}`)
           .then(response => {
             if (response.status === 200) {
               Swal.fire({
@@ -117,7 +118,7 @@ const ShowInventory = () => {
                 icon: "success"
               }).then(() => {
                 // Refresh the inventory list after successful deletion
-                handleSearch();
+                handleSearch({ target: { value: searchQuery } });
               });
             } else {
               Swal.fire({
@@ -211,48 +212,17 @@ const ShowInventory = () => {
   };
 
   return (
-    <div style={styles.container} className="p-4" ref={componentRef}>
-      <div className="sb-nav-fixed">
-        <nav className="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-          <a className="navbar-brand ps-3" href="/">Nadeeka Auto Care</a>
-          <form className="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div className="input-group">
-              <input className="form-control" type="text" value={searchQuery} placeholder="Search for..." aria-label="Search for..." onChange={(e) => setSearchQuery(e.target.value)} aria-describedby="btnNavbarSearch" />
-              <button className="btn btn-primary" id="btnNavbarSearch" onClick={handleSearch} type="button"><i className="fas fa-search"></i></button>
-            </div>
-          </form>
-          <ul className="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="fas fa-user fa-fw"></i></a>
-              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a className="dropdown-item" href="#">Settings</a></li>
-                <li><a className="dropdown-item" href="#">Activity Log</a></li>
-                <li><hr className="dropdown-divider" /></li>
-                <li><a className="dropdown-item" href="#">Logout</a></li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
-      <h1 style={styles.subHeading} className="text-3xl mb-8">Inventory List</h1>
-      <div className="mb-4 flex justify-end items-center">
-        <input
-          type="text"
-          name="searchQuery"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Enter search query"
-          className="mr-2 border border-gray-400 p-2"
-        />
-        <button
-          onClick={handleSearch}
-          style={styles.navButton}
-          className="bg-green-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Search
-        </button>
-      </div>
+    <div className="bg-PrimaryColor min-h-screen p-8">
+      <h1 className="text-extra-dark text-3xl mb-8 font-bold">
+        Manage Spare Parts
+      </h1>
+      <input
+        type="text"
+        placeholder="Search parts..."
+        className="w-full mb-6 p-3 border border-dark rounded-md focus:outline-none focus:ring-2 focus:ring-dark transition"
+        value={searchQuery}
+        onChange={handleSearch}
+      />
       <div className="flex justify-end mb-4">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => window.location.href = '/inventory/create'}>
           Add Inventory
@@ -265,49 +235,52 @@ const ShowInventory = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <table style={styles.table} className="w-full border-separate border-spacing-2" ref={componentRef}>
+        <table className="min-w-full bg-white border border-gray-200 shadow-lg rounded-lg">
           <thead>
-            <tr style={styles.tableHead}>
-              <th style={styles.tableHeader} className="border border-slate-600 rounded-md">No</th>
-              <th style={styles.tableHeader} className="border border-slate-600 rounded-md">Name</th>
-              <th style={styles.tableHeader} className="border border-slate-600 rounded-md">Location</th>
-              <th style={styles.tableHeader} className="border border-slate-600 rounded-md max-md:hidden">Quantity</th>
-              <th style={styles.tableHeader} className="border border-slate-600 rounded-md max-md:hidden">Purchased Price</th>
-              <th style={styles.tableHeader} className="border border-slate-600 rounded-md">Sell Price</th>
-              <th style={styles.tableHeader} className="border border-slate-600 rounded-md">Supplier Name</th>
-              <th style={styles.tableHeader} className="border border-slate-600 rounded-md">Supplier Phone</th>
-              <th style={styles.tableHeader} className="border border-slate-600 rounded-md">Operations</th>
+            <tr className="bg-gradient-to-r from-blue-500 to-teal-400 text-white">
+              <th className="p-4 text-left font-semibold border-b border-gray-300">No</th>
+              <th className="p-4 text-left font-semibold border-b border-gray-300">Name</th>
+              <th className="p-4 text-left font-semibold border-b border-gray-300">Location</th>
+              <th className="p-4 text-left font-semibold border-b border-gray-300">Quantity</th>
+              <th className="p-4 text-left font-semibold border-b border-gray-300">Purchased Price</th>
+              <th className="p-4 text-left font-semibold border-b border-gray-300">Sell Price</th>
+              <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Name</th>
+              <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Phone</th>
+              <th className="p-4 text-left font-semibold border-b border-gray-300">Operations</th>
             </tr>
           </thead>
           <tbody>
             {filteredInventory.map((inventoryItem, index) => (
-              <tr key={inventoryItem._id} className="h-8" style={index % 2 === 0 ? styles.tableRowEven : styles.tableRowOdd}>
-                <td style={styles.tableCell}>{index + 1}</td>
-                <td style={styles.tableCell}>{inventoryItem.Name}</td>
-                <td style={styles.tableCell}>{inventoryItem.Location}</td>
-                <td style={styles.tableCell}> ${inventoryItem.Quantity <= 15 ? 'text-red-500' : ''}`}>{inventoryItem.Quantity}</td>
-                <td style={styles.tableCell} >{inventoryItem.PurchasedPrice}</td>
-                <td style={styles.tableCell}>{inventoryItem.SellPrice}</td>
-                <td style={styles.tableCell}>{inventoryItem.SupplierName}</td>
-                <td style={styles.tableCell}>{inventoryItem.SupplierPhone}</td>
-                <td style={styles.tableCell}>
-                  <div className="flex justify-center gap-x-4">
-                    <Link to={`/inventory/get/${inventoryItem._id}`}>
-                      <BsInfoCircle className="text-2xl text-green-800" />
-                    </Link>
-                    <Link to={`/inventory/edit/${inventoryItem._id}`}>
-                      <AiOutlineEdit className="text-2xl text-yellow-600" />
-                    </Link>
-                    <button onClick={() => handleDelete(inventoryItem._id)}>
-                      <MdOutlineDelete className="text-2xl text-red-600" />
-                    </button>
-                  </div>
+              <tr key={inventoryItem._id} className="h-8" style={{ background: index % 2 === 0 ? "#fff" : "#f9f9f9" }}>
+                <td className="p-4">{index + 1}</td>
+                <td className="p-4">{inventoryItem.Name}</td>
+                <td className="p-4">{inventoryItem.Location}</td>
+                <td className="p-4">{inventoryItem.Quantity}</td>
+                <td className="p-4">{inventoryItem.PurchasedPrice}</td>
+                <td className="p-4">{inventoryItem.SellPrice}</td>
+                <td className="p-4">{inventoryItem.SupplierName}</td>
+                <td className="p-4">{inventoryItem.SupplierPhone}</td>
+                <td className="p-4 flex space-x-2">
+                  <Link to={`/inventory/edit/${inventoryItem._id}`} className="text-blue-500 hover:text-blue-700">
+                    <AiOutlineEdit size={20} />
+                  </Link>
+                  <button onClick={() => handleDelete(inventoryItem._id)} className="text-red-500 hover:text-red-700">
+                    <MdOutlineDelete size={20} />
+                  </button>
+                  <Link to={`/inventory/${inventoryItem._id}`} className="text-gray-500 hover:text-gray-700">
+                    <BsInfoCircle size={20} />
+                  </Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
+      <div className="mt-8">
+        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={generatePDF}>
+          Download Report as PDF
+        </button>
+      </div>
     </div>
   );
 };

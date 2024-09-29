@@ -9,11 +9,11 @@ import Swal from 'sweetalert2';
 import InventoryReport from './InventoryReport';
 import logo from '../../images/logo.jpg';
 import backgroundImage from '../../images/t.jpg';
-import { useReactToPrint } from 'react-to-print';
 import emailjs from 'emailjs-com';
+import Footer from "./../../components/Footer";
+import NavBar from "./../../components/NavBar";
 
 const InventoryDashboard = () => {
-    // State and refs initialization
     const [inventory, setInventory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -25,29 +25,26 @@ const InventoryDashboard = () => {
         setLoading(true);
         try {
             const response = await axios.get(
-                `http://localhost:8076/inventory?search=${searchQuery}`
+                `http://localhost:7788/inventory?search=${searchQuery}`
             );
             setInventory(response.data.data);
             setLoading(false);
             setError(null);
         } catch (error) {
             console.error("Error fetching Inventory Items:", error);
-            setError(
-                "An error occurred while fetching the inventory for the search query."
-            );
+            setError("An error occurred while fetching the inventory for the search query.");
             setLoading(false);
         }
     };
 
-
-    //Send an email
-    const sendEmailToSupplier = (itemName, email) => { 
+    // Send an email
+    const sendEmailToSupplier = (itemName, email) => {
         const emailConfig = {
             serviceID: 'service_p1zv9rh',
             templateID: 'template_pua7ayd',
             userID: 'v53cNBlrti0pL_RxD'
         };
-    
+
         emailjs.send(
             emailConfig.serviceID,
             emailConfig.templateID,
@@ -56,15 +53,17 @@ const InventoryDashboard = () => {
                 message: `Dear Supplier,\n\nWe would like to inform you that the quantity of the item "${itemName}" in our inventory provided by you is low. Please consider restocking.\n\nBest regards,\nNadeeka Auto Service`
             },
             emailConfig.userID
+        ).then(
+            () => Swal.fire('Email Sent!', 'The supplier has been notified.', 'success'),
+            (error) => console.error('Failed to send email:', error)
         );
     };
-    
 
-    // Effect hook to fetch inventory items on component mount
+    // Fetch inventory items on component mount
     useEffect(() => {
         setLoading(true);
         axios
-            .get("http://localhost:8076/inventory")
+            .get("http://localhost:7788/inventory")
             .then((response) => {
                 setInventory(response.data.data);
                 setLoading(false);
@@ -75,7 +74,7 @@ const InventoryDashboard = () => {
             });
     }, []);
 
-    // Function to apply search filter to inventory items
+    // Apply search filter to inventory items
     const applySearchFilter = (inventoryItem) => {
         if (!inventoryItem) return false;
         const searchableFields = [
@@ -95,33 +94,30 @@ const InventoryDashboard = () => {
         );
     };
 
-    // Filtered inventory based on search query
+    // Filter inventory based on search query
     const filteredInventory = inventory.filter(applySearchFilter);
 
-   
     // Alert when quantity of any item is below 15
-useEffect(() => {
-    const itemsBelow15 = filteredInventory.filter(item => item.Quantity <= 15);
-    if (itemsBelow15.length > 0) {
-        const itemListWithSupplier = itemsBelow15.map(item => `<li>${item.Name} Provided By ${item.SupplierEmail}</li>`).join('');
-        Swal.fire({
-            icon: "warning",
-            title: "Warning",
-            html: `Quantity of the following items are at a low level<ul>${itemListWithSupplier}</ul>`,
-            footer: `<button id="sendEmailBtn" class="btn btn-primary">Send an Email</button>`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Call the send email function here
-                itemsBelow15.forEach(item => {
-                    sendEmailToSupplier(item.Name, item.SupplierEmail);
-                });
-            }
-        });
-    }
-}, [filteredInventory]);
+    useEffect(() => {
+        const itemsBelow15 = filteredInventory.filter(item => item.Quantity <= 15);
+        if (itemsBelow15.length > 0) {
+            const itemListWithSupplier = itemsBelow15.map(item => `<li>${item.Name} Provided By ${item.SupplierEmail}</li>`).join('');
+            Swal.fire({
+                icon: "warning",
+                title: "Warning",
+                html: `Quantity of the following items are at a low level<ul>${itemListWithSupplier}</ul>`,
+                footer: `<button id="sendEmailBtn" class="btn btn-primary">Send an Email</button>`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    itemsBelow15.forEach(item => {
+                        sendEmailToSupplier(item.Name, item.SupplierEmail);
+                    });
+                }
+            });
+        }
+    }, [filteredInventory]);
 
-
-    // Function to handle delete item
+    // Handle delete item
     const handleDelete = (id) => {
         Swal.fire({
             title: "Are you sure?",
@@ -133,15 +129,15 @@ useEffect(() => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`http://localhost:8076/inventory/${id}`)
+                axios.delete(`http://localhost:7788/inventory/${id}`)
                     .then(response => {
                         if (response.status === 200) {
                             Swal.fire({
                                 title: "Deleted!",
-                                text: "Your file has been deleted.",
+                                text: "Your item has been deleted.",
                                 icon: "success"
                             }).then(() => {
-                                handleSearch();
+                                handleSearch();  // Refresh the inventory list
                             });
                         } else {
                             Swal.fire({
@@ -162,7 +158,7 @@ useEffect(() => {
             }
         });
     };
-    // Inline styles for components
+
     const styles = {
         container: {
             color: 'black',
@@ -234,109 +230,80 @@ useEffect(() => {
     };
 
     return (
-        <div style={styles.container} className="p-4" ref={componentRef}>
-            <div className="sb-nav-fixed">
-                <nav className="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-                    <a className="navbar-brand ps-3" href="/">Nadeeka Auto Care</a>
-                    <form className="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                        <div className="input-group">
-                            <input className="form-control" type="text" value={searchQuery} placeholder="Search for..." aria-label="Search for..." onChange={(e) => setSearchQuery(e.target.value)} aria-describedby="btnNavbarSearch" />
-                            <button className="btn btn-primary" id="btnNavbarSearch" onClick={handleSearch} type="button"><i className="fas fa-search"></i></button>
-                        </div>
-                    </form>
-                    <ul className="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-                        <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="fas fa-user fa-fw"></i></a>
-                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a className="dropdown-item" href="#">Settings</a></li>
-                                <li><a className="dropdown-item" href="#">Activity Log</a></li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li><a className="dropdown-item" href="#">Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
-                <div id="layoutSidenav">
-                    <div id="layoutSidenav_nav">
-                        <nav className="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                            <div className="sb-sidenav-menu">
-                                <div className="nav-link">
-                                    <div className="sb-nav-link-icon">
-                                        <img src={logo} alt="Nadeeka Auto Logo" style={styles.logo} />
-                                        <button
-                                            onClick={() => { window.location.href = '/inventory/create' }}
-                                            style={styles.navButton}>
-                                            Add New Items
-                                        </button>
-                                        <div
-                                            style={styles.navButton}>
-                                            <InventoryReport filteredInventory={filteredInventory} />
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                    <div id="layoutSidenav_content">
-                        {loading ? (<Spinner />) : (
-                            <main>
-                                <div className="">
-                                    <h1 style={styles.subHeading}>Inventory Dashboard</h1>
-                                    <div className="">
-                                        <div className='' ref={componentRef}>
-                                            <table className='' style={styles.table}>
-                                                <thead style={styles.tableHead}>
-                                                    <tr>
-                                                        <th style={styles.tableHeader}>No</th>
-                                                        <th style={styles.tableHeader}>Name</th>
-                                                        <th style={styles.tableHeader}>Location</th>
-                                                        <th style={styles.tableHeader}>Quantity</th>
-                                                        <th style={styles.tableHeader}>Purchased Price</th>
-                                                        <th style={styles.tableHeader}>Sell Price</th>
-                                                        <th style={styles.tableHeader}>Supplier Name</th>
-                                                        <th style={styles.tableHeader}>Supplier Phone</th>
-                                                        <th style={styles.tableHeader}>Supplier Email</th> {/* Add table header for Supplier Email */}
-                                                        <th style={styles.tableHeader}>Operations</th>
-                                                        
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {filteredInventory.map((inventoryItem, index) => (
-                                                        <tr key={inventoryItem._id} className="h-8" style={index % 2 === 0 ? styles.tableRowEven : styles.tableRowOdd}>
-                                                            <td style={styles.tableCell}>{index + 1}</td>
-                                                            <td style={styles.tableCell}>{inventoryItem.Name}</td>
-                                                            <td style={styles.tableCell}>{inventoryItem.Location}</td>
-                                                            <td style={{ ...styles.tableCell, color: inventoryItem.Quantity <= 15 ? 'red' : 'white' }}>{inventoryItem.Quantity}</td>
-                                                            <td style={styles.tableCell}>{inventoryItem.PurchasedPrice}</td>
-                                                            <td style={styles.tableCell}>{inventoryItem.SellPrice}</td>
-                                                            <td style={styles.tableCell}>{inventoryItem.SupplierName}</td>
-                                                            <td style={styles.tableCell}>{inventoryItem.SupplierPhone}</td>
-                                                            <td style={styles.tableCell}>{inventoryItem.SupplierEmail}</td> {/* Include Supplier Email in table cells */}
-                                                            <td style={styles.tableCell}>
-                                                                <div className='flex justify-center gap-x-4'>
-                                                                    <Link to={`/inventory/get/${inventoryItem._id}`}>
-                                                                        <BsInfoCircle className='text-2x1 text-green-800' />
-                                                                    </Link>
-                                                                    <Link to={`/inventory/edit/${inventoryItem._id}`}>
-                                                                        <AiOutlineEdit className='text-2x1 text-yellow-600' />
-                                                                    </Link>
-                                                                    <button onClick={() => handleDelete(inventoryItem._id)}>
-                                                                        <MdOutlineDelete className="text-2xl text-red-600" />
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </main>
-                        )}
+
+        <div>
+            <div className="navbar">
+                <NavBar />
+            </div>
+            <div className="min-h-screen p-8">
+
+
+                <h1 className="text-3xl mb-8 font-bold">Manage Spare Parts</h1>
+                <input
+                    type="text"
+                    placeholder="Search parts..."
+                    className="w-full mb-6 p-3 border rounded-md"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <div className="flex justify-end mb-4">
+                    <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => window.location.href = '/inventory/create'}>
+                        Add Inventory
+                    </button>
+                    <div className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4">
+                        <InventoryReport filteredInventory={filteredInventory} />
                     </div>
                 </div>
+                {loading ? (
+                    <Spinner />
+                ) : (
+                    <table className="min-w-full bg-white border border-gray-200 shadow-lg rounded-lg">
+                        <thead>
+                            <tr className="bg-gradient-to-r from-blue-500 to-teal-400 text-white">
+                                <th className="p-4 text-left font-semibold border-b border-gray-300">No</th>
+                                <th className="p-4 text-left font-semibold border-b border-gray-300">Name</th>
+                                <th className="p-4 text-left font-semibold border-b border-gray-300">Location</th>
+                                <th className="p-4 text-left font-semibold border-b border-gray-300">Quantity</th>
+                                <th className="p-4 text-left font-semibold border-b border-gray-300">Purchased Price</th>
+                                <th className="p-4 text-left font-semibold border-b border-gray-300">Sell Price</th>
+                                <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Name</th>
+                                <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Phone</th>
+                                <th className="p-4 text-left font-semibold border-b border-gray-300">Operations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredInventory.map((inventoryItem, index) => (
+                                <tr key={inventoryItem._id} style={{ background: index % 2 === 0 ? '#f9f9f9' : '#fff' }}>
+                                    <td className="p-4 border-b border-gray-300">{index + 1}</td>
+                                    <td className="p-4 border-b border-gray-300">{inventoryItem.Name}</td>
+                                    <td className="p-4 border-b border-gray-300">{inventoryItem.Location}</td>
+                                    <td className="p-4 border-b border-gray-300">{inventoryItem.Quantity}</td>
+                                    <td className="p-4 border-b border-gray-300">{inventoryItem.PurchasedPrice}</td>
+                                    <td className="p-4 border-b border-gray-300">{inventoryItem.SellPrice}</td>
+                                    <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierName}</td>
+                                    <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierPhone}</td>
+                                    <td className="p-4 border-b border-gray-300">
+                                        <Link to={`/inventory/edit/${inventoryItem._id}`} className="mr-2">
+                                            <AiOutlineEdit className="inline-block text-blue-500 hover:text-blue-700" />
+                                        </Link>
+                                        <button onClick={() => handleDelete(inventoryItem._id)} className="mr-2">
+                                            <MdOutlineDelete className="inline-block text-red-500 hover:text-red-700" />
+                                        </button>
+                                        <Link to={`/inventory/details/${inventoryItem._id}`}>
+                                            <BsInfoCircle className="inline-block text-green-500 hover:text-green-700" />
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+
+                {/* Footer */}
+
+                <Footer />
             </div>
         </div>
     );

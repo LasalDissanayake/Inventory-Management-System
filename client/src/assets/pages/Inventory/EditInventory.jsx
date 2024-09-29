@@ -21,7 +21,7 @@ const EditInventory = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`http://localhost:8076/inventory/${id}`)
+    axios.get(`http://localhost:7788/inventory/${id}`)
       .then((response) => {
         const data = response.data;
         setName(data.Name);
@@ -136,7 +136,7 @@ const EditInventory = () => {
     setLoading(true);
   
     axios
-      .put(`http://localhost:8076/inventory/${id}`, data)
+      .put(`http://localhost:7788/inventory/${id}`, data)
       .then(() => {
         setLoading(false);
         Swal.fire({
