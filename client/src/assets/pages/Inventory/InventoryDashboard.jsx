@@ -159,76 +159,7 @@ const InventoryDashboard = () => {
         });
     };
 
-    const styles = {
-        container: {
-            color: 'black',
-            border: '3px solid white',
-            backgroundImage: `url(${backgroundImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-        },
-        navButton: {
-            backgroundColor: 'red',
-            color: 'white',
-            padding: '0.5rem 2rem',
-            borderRadius: '5px',
-            width: '220px',
-            textDecoration: 'none',
-            height: '53px',
-            marginTop: '15px'
-        },
-        logo: {
-            width: '100%',
-            height: '200px',
-            border: '2px solid red'
-        },
-        table: {
-            width: '100%',
-            margin: '0 auto',
-            padding: '20px',
-            background: 'lightgray',
-            borderRadius: '10px',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)',
-            fontFamily: 'Arial, sans-serif',
-            color: '#fff',
-            background: '#1f1f1f'
-        },
-        tableHead: {
-            background: '#333',
-            color: 'red',
-            textAlign: 'center',
-        },
-        tableHeader: {
-            padding: '10px',
-            textAlign: 'left',
-            color: 'red',
-            border: '1px solid red',
-        },
-        tableRowEven: {
-            background: '#2f2f2f',
-        },
-        tableRowOdd: {
-            background: '#1f1f1f',
-        },
-        tableCell: {
-            padding: '10px',
-            textAlign: 'left',
-            borderLeft: '1px solid red', // Adding left border
-            borderRight: '1px solid red',
-            background: '#1f1f1f',
-            color: 'white',
-        },
-        subHeading: {
-            marginTop: '20px',
-            fontSize: '2rem',
-            fontWeight: 'bold',
-            marginBottom: '20px',
-            color: '#fff',
-            textAlign: 'center',
-            textTransform: 'uppercase',
-        },
-    };
-
+    
     return (
 
         <div>
@@ -291,7 +222,7 @@ const InventoryDashboard = () => {
                                         <button onClick={() => handleDelete(inventoryItem._id)} className="mr-2">
                                             <MdOutlineDelete className="inline-block text-red-500 hover:text-red-700" />
                                         </button>
-                                        <Link to={`/inventory/details/${inventoryItem._id}`}>
+                                        <Link to={`/inventory/get/${inventoryItem._id}`}>
                                             <BsInfoCircle className="inline-block text-green-500 hover:text-green-700" />
                                         </Link>
                                     </td>

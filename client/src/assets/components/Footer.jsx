@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer style={{ backgroundColor: "#3A6D8C" }} className="text-white py-8 px-6">
+    <footer style={{ backgroundColor: "#EAD8B1" }} className="text-black py-8 px-6">
       <div className="flex flex-col md:flex-row justify-between items-center">
         <div className="mb-4 md:mb-0">
           <h2 className="text-lg font-bold">Mr.Automotive</h2>
@@ -14,7 +14,7 @@ const Footer = () => {
             <ul className="space-y-2">
               {["About us", "Contact us", "Pricing", "Testimonials"].map(
                 (item) => (
-                  <li key={item} className="hover:text-yellow-400">
+                  <li key={item} className="hover:text-blue-400">
                     {item}
                   </li>
                 )
@@ -31,7 +31,7 @@ const Footer = () => {
                 "Privacy policy",
                 "Status",
               ].map((item) => (
-                <li key={item} className="hover:text-yellow-400">
+                <li key={item} className="hover:text-blue-400">
                   {item}
                 </li>
               ))}

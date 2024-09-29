@@ -14,7 +14,7 @@ const ReadOneInventory = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:8076/inventory/${id}`)
+      .get(`http://localhost:7788/inventory/${id}`)
       .then((response) => {
         setInventory(response.data);
         setLoading(false);
@@ -32,7 +32,7 @@ const ReadOneInventory = () => {
       const updatedInventory = { ...inventory, Quantity: newQuantity };
       setInventory(updatedInventory);
       axios
-        .put(`http://localhost:8076/inventory/${id}`, updatedInventory)
+        .put(`http://localhost:7788/inventory/${id}`, updatedInventory)
         .then(() => console.log('Quantity updated in database'))
         .catch((error) =>
           console.error('Error updating quantity in database:', error)
