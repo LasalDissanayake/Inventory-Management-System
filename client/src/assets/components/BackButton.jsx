@@ -14,7 +14,7 @@ const BackButton = ({ destination }) => {
 const styles = {
 
   button: {
-    backgroundColor: 'red',
+    backgroundColor: '#5b2c6f',
     color: '#fff',
     border: 'none',
     borderRadius: '0.25rem',

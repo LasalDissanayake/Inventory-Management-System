@@ -4,7 +4,7 @@ import BackButton from '../../components/BackButton';
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2"; // Import SweetAlert2
-import backgroundImage from '../../images/t.jpg';
+import backgroundImage from '../../images/t.png';
 
 const RetrieveExistingInventory = () => {
   const [name, setName] = useState('');
@@ -16,7 +16,7 @@ const RetrieveExistingInventory = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`http://localhost:8076/inventory/${id}`, {
+    axios.get(`http://localhost:7788/inventory/${id}`, {
       params: {
         fields: ['Name', 'Quantity'].join(',')
       }
@@ -43,7 +43,7 @@ const RetrieveExistingInventory = () => {
           Quantity: updatedQuantity
         };
         axios
-          .put(`http://localhost:8076/inventory/${id}`, data)
+          .put(`http://localhost:7788/inventory/${id}`, data)
           .then(() => {
             setRetrieveAmount(0);
             // Display SweetAlert2 when item is successfully removed
@@ -113,6 +113,8 @@ const RetrieveExistingInventory = () => {
 };
 
 const styles = {
+
+  
   container: {
     display: 'flex',
     justifyContent: 'center',
@@ -124,12 +126,12 @@ const styles = {
   },
   formContainer: {
     width: '50%',
-    backgroundColor: 'rgba(5, 4, 2, 0.8)',
+    backgroundColor: 'rgba(133, 193, 233,0.9)',
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.8)',
     padding: '20px',
-    border: '2px solid red', // Add a red border
-    borderColor: 'red',
+    border: '2px solid black', // Add a red border
+    borderColor: 'blue',
     margin: '10px',
     textAlign: 'center',
     position: 'relative', // Add this line for absolute positioning of the line
@@ -149,18 +151,18 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '10px',
-    border: '1px solid rgba(255, 255, 255, 0.8)',
+    border: '1px solid rgba(213, 228, 234, 0.8)',
     borderRadius: '5px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)',
-    color: 'rgba(255, 255, 255, 0.8)',
-    backgroundColor: 'rgba(5, 4, 2, 0.8)',
+    color: 'rgba(171, 235, 198, 0.8)',
+    backgroundColor: 'rgba(202, 207, 210, 0.8)',
   },
   label: {
     fontWeight: 'bold',
     marginBottom: '0.5rem',
     flexDirection: 'column',
     fontSize: '1.2rem',
-    color: 'red',
+    color: 'black',
     textAlign: 'center',
     width: '100%',
     alignItems: 'center',
@@ -174,8 +176,8 @@ const styles = {
     padding: '10px',
     borderRadius: '5px',
     border: '1px solid #ccc',
-    backgroundColor: 'black',
-    color: 'white',
+    backgroundColor: 'white',
+    color: 'black',
     fontSize: '1.2rem',
     marginBottom: '10px',
     textAlign: 'left',
@@ -187,7 +189,7 @@ const styles = {
     marginTop: '20px' // Add margin top to create space between buttons and form
   },
   button: {
-    backgroundColor: '#ff0000',
+    backgroundColor: '#6c3483 ',
     color: '#ffffff',
     padding: '10px 20px',
     borderRadius: '5px',
@@ -197,5 +199,4 @@ const styles = {
     marginRight: '10px' // Add margin right to create space between buttons
   },
 };
-
 export default RetrieveExistingInventory;

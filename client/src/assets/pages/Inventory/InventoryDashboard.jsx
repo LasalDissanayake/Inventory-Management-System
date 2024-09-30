@@ -8,7 +8,7 @@ import { MdOutlineAddBox, MdOutlineDelete } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import InventoryReport from './InventoryReport';
 import logo from '../../images/logo.jpg';
-import backgroundImage from '../../images/t.jpg';
+import backgroundImage from '../../images/t.png';
 import emailjs from 'emailjs-com';
 import Footer from "./../../components/Footer";
 import NavBar from "./../../components/NavBar";

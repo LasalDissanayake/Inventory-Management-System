@@ -3,8 +3,9 @@ import Spinner from "../../components/Spinner";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import backgroundImage from '../../images/t.jpg';
-import BackButton from '../../components/BackButton';
+import NavBar from "../../components/NavBar"; // Ensure to import NavBar
+import Footer from "../../components/Footer"; // Ensure to import Footer
+import backgroundImage from '../../images/t.png'; // Make sure to import your background image
 
 const EditInventory = () => {
   const [name, setName] = useState('');
@@ -18,6 +19,8 @@ const EditInventory = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const [errors, setErrors] = useState({});
+
 
   useEffect(() => {
     setLoading(true);
@@ -48,7 +51,7 @@ const EditInventory = () => {
   const handleEditInventory = () => {
     // Frontend validation
     const negativeFields = [];
-    
+
     if (!name || !quantity || !purchasedPrice || !sellPrice || !supplierName || !supplierPhone || !supplierEmail) {
       Swal.fire({
         icon: 'error',
@@ -57,7 +60,7 @@ const EditInventory = () => {
       });
       return;
     }
-  
+
     if (isNaN(quantity) || isNaN(purchasedPrice) || isNaN(sellPrice)) {
       Swal.fire({
         icon: 'error',
@@ -66,19 +69,11 @@ const EditInventory = () => {
       });
       return;
     }
-  
-    if (quantity < 0) {
-      negativeFields.push('Quantity');
-    }
-  
-    if (purchasedPrice < 0) {
-      negativeFields.push('Purchased Price');
-    }
-  
-    if (sellPrice < 0) {
-      negativeFields.push('Sell Price');
-    }
-  
+
+    if (quantity < 0) negativeFields.push('Quantity');
+    if (purchasedPrice < 0) negativeFields.push('Purchased Price');
+    if (sellPrice < 0) negativeFields.push('Sell Price');
+
     if (sellPrice < purchasedPrice) {
       Swal.fire({
         icon: 'error',
@@ -87,7 +82,7 @@ const EditInventory = () => {
       });
       return;
     }
-  
+
     if (negativeFields.length > 0) {
       Swal.fire({
         icon: 'error',
@@ -120,7 +115,7 @@ const EditInventory = () => {
 
     // Convert name to uppercase
     const uppercaseName = name.toUpperCase();
-  
+
     // Proceed with editing inventory
     const data = {
       Name: uppercaseName,
@@ -132,9 +127,9 @@ const EditInventory = () => {
       SupplierPhone: supplierPhone,
       SupplierEmail: supplierEmail,
     };
-  
+
     setLoading(true);
-  
+
     axios
       .put(`http://localhost:7788/inventory/${id}`, data)
       .then(() => {
@@ -159,180 +154,125 @@ const EditInventory = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <BackButton destination={`/inventory/InventoryDashboard`} />
-      {loading ? <Spinner /> : ''}
-      <div style={styles.formContainer}>
-        <h1 style={styles.heading}>Edit inventory</h1>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={styles.input}
-          />
+    <div>
+      <NavBar />
+
+      <div style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="bg-PrimaryColor min-h-screen flex justify-center items-center p-4 pt-24"> {/* Add pt-24 to provide space for header */}
+          <div className="bg-SecondaryColor p-8 rounded-lg shadow-2xl max-w-2xl w-full" style={{ backgroundColor: '#fafffd' }}> {/* Change form color here */}
+            <h2 className="text-dark text-2xl font-bold mb-6">Edit Inventory Item</h2>
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                <div className="mb-4">
+                  <label className="text-dark block mb-2">Name</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border border-dark rounded"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                {/* Location input field */}
+                <div className="mb-4">
+                  <label className="text-dark block mb-2">Location</label>
+                  <select
+                    className="w-full p-2 border border-dark rounded"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  >
+                    <option value="">Select Location</option>
+                    <option value="Vault">Vault</option>
+                    <option value="Carton/Shelf">Carton/Shelf</option>
+                    <option value="Drawer">Drawer</option>
+                    <option value="Box">Box</option>
+                    <option value="Cabinet">Cabinet</option>
+                    <option value="Locker">Locker</option>
+                    <option value="Tray">Tray</option>
+                    <option value="Rack">Rack</option>
+                    <option value="Bin">Bin</option>
+                    <option value="Compartment">Compartment</option>
+                    <option value="Container">Container</option>
+                    <option value="Barrel">Barrel set</option>
+                  </select>
+                  {errors.location && <p style={styles.error}>{errors.location}</p>}
+                </div>
+                <div className="mb-4">
+                  <label className="text-dark block mb-2">Quantity</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border border-dark rounded"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="text-dark block mb-2">Purchased Price</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border border-dark rounded"
+                    value={purchasedPrice}
+                    onChange={(e) => setPurchasedPrice(e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="text-dark block mb-2">Sell Price</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border border-dark rounded"
+                    value={sellPrice}
+                    onChange={(e) => setSellPrice(e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="text-dark block mb-2">Supplier Name</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border border-dark rounded"
+                    value={supplierName}
+                    onChange={(e) => setSupplierName(e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="text-dark block mb-2">Supplier Phone</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border border-dark rounded"
+                    value={supplierPhone}
+                    onChange={(e) => {
+                      const inputPhone = e.target.value;
+                      if (inputPhone === '' || (inputPhone.length <= 10 && /^\d+$/.test(inputPhone))) {
+                        setSupplierPhone(inputPhone);
+                      }
+                    }}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="text-dark block mb-2">Supplier Email</label>
+                  <input
+                    type="email"
+                    className="w-full p-2 border border-dark rounded"
+                    value={supplierEmail}
+                    onChange={(e) => setSupplierEmail(e.target.value)}
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+                    onClick={handleEditInventory}
+                  >
+                    Save
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Location</label>
-          <input
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Quantity</label>
-          <input
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Purchased Price</label>
-          <input
-            type="number"
-            value={purchasedPrice}
-            onChange={(e) => setPurchasedPrice(e.target.value)}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Sell Price</label>
-          <input
-            type="number"
-            value={sellPrice}
-            onChange={(e) => setSellPrice(e.target.value)}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Supplier Name</label>
-          <input
-            type="text"
-            value={supplierName}
-            onChange={(e) => setSupplierName(e.target.value)}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Supplier Phone</label>
-          <input
-            type="text"
-            value={supplierPhone}
-            onChange={(e) => {
-              const inputPhone = e.target.value;
-              if (inputPhone === '' || (inputPhone.length <= 10 && /^\d+$/.test(inputPhone))) {
-                setSupplierPhone(inputPhone);
-              }
-            }}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Supplier Email</label>
-          <input
-            type="email"
-            value={supplierEmail}
-            onChange={(e) => setSupplierEmail(e.target.value)}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.buttonContainer}>
-          <button style={styles.button} onClick={handleEditInventory}>
-            Save
-          </button>
-        </div>
+        <Footer />
       </div>
-    </div>
-  );
+      </div>
+      );
 };
 
-const styles = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  formContainer: {
-    width: '50%',
-    backgroundColor: 'rgba(5, 4, 2, 0.8)',
-    borderRadius: '10px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.8)',
-    padding: '20px',
-    border: '2px solid red',
-    borderColor: 'red',
-    margin: '10px',
-    textAlign: 'center',
-    position: 'relative',
-  },
-  heading: {
-    fontSize: '3rem',
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginBottom: '20px',
-  },
-  formGroup: {
-    marginBottom: '1.5rem',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '10px',
-    border: '1px solid rgba(255, 255, 255, 0.8)',
-    borderRadius: '5px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)',
-    color: 'rgba(255, 255, 255, 0.8)',
-    backgroundColor: 'rgba(5, 4, 2, 0.8)',
-  },
-  label: {
-    fontWeight: 'bold',
-    marginBottom: '0.5rem',
-    flexDirection: 'column',
-    fontSize: '1.2rem',
-    color: 'red',
-    textAlign: 'center',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '10px',
-    display: 'block',
-    textTransform: 'uppercase',
-  },
-  input: {
-    width: '100%',
-    padding: '10px',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    backgroundColor: 'black',
-    color: 'white',
-    fontSize: '1.2rem',
-    marginBottom: '10px',
-    textAlign: 'left',
-    display: 'block',
-  },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  button: {
-    backgroundColor: '#ff0000',
-    color: '#ffffff',
-    padding: '10px 20px',
-    borderRadius: '5px',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'background-color 0.8s',
-  },
-};
-
-export default EditInventory;
+      export default EditInventory;
