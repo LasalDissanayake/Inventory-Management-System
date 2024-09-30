@@ -139,7 +139,7 @@ const EditInventory = () => {
           title: 'Success!',
           text: 'Inventory data updated successfully!',
         }).then(() => {
-          navigate('/inventory/InventoryDashboard');
+          navigate('/');
         });
       })
       .catch((error) => {

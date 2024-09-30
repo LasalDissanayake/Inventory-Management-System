@@ -8,7 +8,7 @@ import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
 import { useReactToPrint } from 'react-to-print';
 import Swal from 'sweetalert2';
 import InventoryReport from "./InventoryReport.jsx";
-import logo from '../../images/logo.jpg';
+
 import backgroundImage from '../../images/t.png';
 
 const ShowInventory = () => {

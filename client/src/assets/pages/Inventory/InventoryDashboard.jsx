@@ -7,8 +7,7 @@ import { BsInfoCircle } from 'react-icons/bs';
 import { MdOutlineAddBox, MdOutlineDelete } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import InventoryReport from './InventoryReport';
-import logo from '../../images/logo.jpg';
-import backgroundImage from '../../images/t.png';
+
 import emailjs from 'emailjs-com';
 import Footer from "./../../components/Footer";
 import NavBar from "./../../components/NavBar";
@@ -105,8 +104,10 @@ const InventoryDashboard = () => {
             Swal.fire({
                 icon: "warning",
                 title: "Warning",
-                html: `Quantity of the following items are at a low level<ul>${itemListWithSupplier}</ul>`,
-                footer: `<button id="sendEmailBtn" class="btn btn-primary">Send an Email</button>`
+                html: `Quantity of the following items are at a low level:<ul>${itemListWithSupplier}</ul>`,
+                showCancelButton: true,
+                confirmButtonText: "Send an Email",
+                cancelButtonText: "Cancel",
             }).then((result) => {
                 if (result.isConfirmed) {
                     itemsBelow15.forEach(item => {
@@ -159,84 +160,82 @@ const InventoryDashboard = () => {
         });
     };
 
-    
     return (
 
         <div>
             <div className="navbar">
                 <NavBar />
             </div>
-            <div className="min-h-screen p-8">
 
+            <h1 className="text-3xl mb-8 font-bold">Manage Spare Parts</h1>
 
-                <h1 className="text-3xl mb-8 font-bold">Manage Spare Parts</h1>
-                <input
-                    type="text"
-                    placeholder="Search parts..."
-                    className="w-full mb-6 p-3 border rounded-md"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <div className="flex justify-end mb-4">
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => window.location.href = '/inventory/create'}>
-                        Add Inventory
-                    </button>
-                    <div className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4">
-                        <InventoryReport filteredInventory={filteredInventory} />
-                    </div>
+            <input
+                type="text"
+                placeholder="Search parts..."
+                className="w-5/6 mb-4 p-2 border border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
+
+            <div className="flex justify-end mb-4">
+                <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => window.location.href = '/inventory/create'}>
+                    Add Inventory
+                </button>
+                <div className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4">
+                    <InventoryReport filteredInventory={filteredInventory} />
                 </div>
-                {loading ? (
-                    <Spinner />
-                ) : (
-                    <table className="min-w-full bg-white border border-gray-200 shadow-lg rounded-lg">
-                        <thead>
-                            <tr className="bg-gradient-to-r from-blue-500 to-teal-400 text-white">
-                                <th className="p-4 text-left font-semibold border-b border-gray-300">No</th>
-                                <th className="p-4 text-left font-semibold border-b border-gray-300">Name</th>
-                                <th className="p-4 text-left font-semibold border-b border-gray-300">Location</th>
-                                <th className="p-4 text-left font-semibold border-b border-gray-300">Quantity</th>
-                                <th className="p-4 text-left font-semibold border-b border-gray-300">Purchased Price</th>
-                                <th className="p-4 text-left font-semibold border-b border-gray-300">Sell Price</th>
-                                <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Name</th>
-                                <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Phone</th>
-                                <th className="p-4 text-left font-semibold border-b border-gray-300">Operations</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredInventory.map((inventoryItem, index) => (
-                                <tr key={inventoryItem._id} style={{ background: index % 2 === 0 ? '#f9f9f9' : '#fff' }}>
-                                    <td className="p-4 border-b border-gray-300">{index + 1}</td>
-                                    <td className="p-4 border-b border-gray-300">{inventoryItem.Name}</td>
-                                    <td className="p-4 border-b border-gray-300">{inventoryItem.Location}</td>
-                                    <td className="p-4 border-b border-gray-300">{inventoryItem.Quantity}</td>
-                                    <td className="p-4 border-b border-gray-300">{inventoryItem.PurchasedPrice}</td>
-                                    <td className="p-4 border-b border-gray-300">{inventoryItem.SellPrice}</td>
-                                    <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierName}</td>
-                                    <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierPhone}</td>
-                                    <td className="p-4 border-b border-gray-300">
-                                        <Link to={`/inventory/edit/${inventoryItem._id}`} className="mr-2">
-                                            <AiOutlineEdit className="inline-block text-blue-500 hover:text-blue-700" />
-                                        </Link>
-                                        <button onClick={() => handleDelete(inventoryItem._id)} className="mr-2">
-                                            <MdOutlineDelete className="inline-block text-red-500 hover:text-red-700" />
-                                        </button>
-                                        <Link to={`/inventory/get/${inventoryItem._id}`}>
-                                            <BsInfoCircle className="inline-block text-green-500 hover:text-green-700" />
-                                        </Link>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-
-                {/* Footer */}
-
-                <Footer />
             </div>
+            {loading ? (
+                <Spinner />
+            ) : (
+                <table className="min-w-full bg-white border border-gray-200 shadow-lg rounded-lg">
+                    <thead>
+                        <tr className="bg-gradient-to-r from-blue-500 to-teal-400 text-white">
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">No</th>
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">Name</th>
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">Location</th>
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">Quantity</th>
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">Purchased Price</th>
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">Sell Price</th>
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Name</th>
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Phone</th>
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Email</th>
+                            <th className="p-4 text-left font-semibold border-b border-gray-300">Operations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredInventory.map((inventoryItem, index) => (
+                            <tr key={inventoryItem._id} style={{ background: index % 2 === 0 ? '#f9f9f9' : '#fff' }}>
+                                <td className="p-4 border-b border-gray-300">{index + 1}</td>
+                                <td className="p-4 border-b border-gray-300">{inventoryItem.Name}</td>
+                                <td className="p-4 border-b border-gray-300">{inventoryItem.Location}</td>
+                                <td className="p-4 border-b border-gray-300">{inventoryItem.Quantity}</td>
+                                <td className="p-4 border-b border-gray-300">{inventoryItem.PurchasedPrice}</td>
+                                <td className="p-4 border-b border-gray-300">{inventoryItem.SellPrice}</td>
+                                <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierName}</td>
+                                <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierPhone}</td>
+                                <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierEmail}</td>
+                                <td className="p-4 border-b border-gray-300">
+                                    <Link to={`/inventory/edit/${inventoryItem._id}`} className="mr-2">
+                                        <AiOutlineEdit className="inline-block text-blue-500 hover:text-blue-700" />
+                                    </Link>
+                                    <button onClick={() => handleDelete(inventoryItem._id)} className="mr-2">
+                                        <MdOutlineDelete className="inline-block text-red-500 hover:text-red-700" />
+                                    </button>
+                                    <Link to={`/inventory/get/${inventoryItem._id}`}>
+                                        <BsInfoCircle className="inline-block text-green-500 hover:text-green-700" />
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
+            <Footer />
         </div>
+
     );
 };
 

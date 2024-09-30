@@ -19,6 +19,8 @@ const App = () => {
   return (
     <>
       <Routes>
+
+
         <Route path='/inventory/edit/:id' element={<EditInventory />}></Route>
         <Route path='/inventory/allInventory' element={<ShowInventory />}></Route> 
         <Route path='/inventory/create' element={<CreateInventory />}></Route>
@@ -28,7 +30,9 @@ const App = () => {
         <Route path='/inventory/retrieveItem/:id' element={<RetrieveExistingInventory />}></Route>
         <Route path='/' element={<InventoryDashboard />}></Route>
         {/* <Route path='/inventory/InventoryDashboard' element={<InventoryDashboard />}></Route> */}
-        <Route path='/inventory/InventoryReport' element={<InventoryReport />}></Route>    
+        <Route path='/inventory/InventoryReport' element={<InventoryReport />}></Route>   
+
+
       </Routes>
     </>
   );
