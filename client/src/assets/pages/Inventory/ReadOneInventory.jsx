@@ -160,27 +160,8 @@ const ReadOneInventory = () => {
       marginBottom: '30px',
       color: '#fff',
   },
-      vehicleContainer: {
-        maxWidth: '800px',
-      margin: '0 auto',
-      boxShadow: '0 4px 6px rgba(0, 0, 4, 0.6)',
-      borderRadius: '10px',
-      backgroundColor: 'rgba(5, 4, 2, 0.8)',
-      padding: '20px',
-      textAlign: 'left',
-      justifyContent: 'center',
-      alignItems: 'center',
-      // Set a specific height to fit content, or remove this line if not needed
-      maxHeight: 'calc(100vh - 40px)', // Ensure it doesn't exceed the viewport height
-      overflow: 'hidden', // Prevent scroll
-      backdropFilter: 'blur(100px)',
-      opacity: '0.9',
-  },
-      vehicleInfo: {
-        margin: '0 auto',
-      padding: '20px',
-      width: '80%',
-  },
+      
+      
       label: {
         fontWeight: 'bold',
       color: 'red',

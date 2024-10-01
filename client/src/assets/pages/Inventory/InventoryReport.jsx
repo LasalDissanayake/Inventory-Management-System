@@ -43,8 +43,8 @@ export default function InventoryReport({ filteredInventory }) {
 
     const date = new Date().toLocaleDateString(); // Using simpler method to get current date
 
-    doc.setFontSize(28).setFont("Mooli", "bold").setTextColor("red");
-    doc.text("Nadeeka Auto care", 60, 15);
+    doc.setFontSize(28).setFont("Mooli", "bold").setTextColor("blue");
+    doc.text("Blue Aqua Pets Aquarium", 50, 15);
 
     doc.setFont("helvetica", "normal").setFontSize(20).setTextColor(0, 0, 0);
     doc.text("Inventory Details Report", 65, 25);
@@ -57,7 +57,7 @@ export default function InventoryReport({ filteredInventory }) {
       .setFontSize(12)
       .setTextColor(150, 150, 150);
     doc.text(
-      "Nadeeka Auto Care, 1 ela, Moraketiya Road, Embilipitiya",
+      "Blue Aqua Pets , 1 ela, Moraketiya Road, Embilipitiya",
       30,
       45
     );
@@ -84,7 +84,7 @@ export default function InventoryReport({ filteredInventory }) {
       },
     });
 
-    doc.save(`Vehicle-Details-Report_${date}.pdf`);
+    doc.save(`Aquarium-Details-Report_${date}.pdf`);
   }
 
   return (
