@@ -85,6 +85,7 @@ const InventoryDashboard = () => {
             'SellPrice',
             'SupplierName',
             'SupplierPhone',
+            'SupplierEmail',
             'Operations'
         ];
 
@@ -168,7 +169,7 @@ const InventoryDashboard = () => {
         
         {/* Add padding to ensure content starts below NavBar */}
         <div className='flex-grow bg-gray-100 pt-16'>
-            <h1 className="text-3xl mb-8 font-bold">Manage Spare Parts</h1>
+            <h1 className="text-3xl mb-8 font-bold">Manage Inventory Items</h1>
             
             <div className="flex items-center justify-between bg-white h-16 px-4 shadow">
                 <div className="flex space-x-4">
