@@ -66,137 +66,77 @@ const RetrieveExistingInventory = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <BackButton destination={`/inventory/get/${id}`} />
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImage})` }}>
       
-      {loading ? <Spinner /> : ''}
-      <div style={styles.formContainer}>
-      <h1 style={styles.heading}>View Inventory</h1>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Name</label>
-          <input
-            type="text"
-            value={name}
-            readOnly
-            style={styles.input}
-          />
+      <div className="mr-[80%]"><BackButton destination={`/inventory/get/${id}`} />
+      </div>
+      {loading && <Spinner />}
+      <form className=" rounded-3xl shadow-2xl p-6 w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">View Inventory</h2>
+        <div className="grid grid-cols-1 gap-6 mb-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="name">
+              Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              className="block w-full h-12 px-4 bg-gray-50 leading-7 text-base font-normal shadow border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none"
+              placeholder="Name"
+              value={name}
+              readOnly
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="quantity">
+              Current Quantity
+            </label>
+            <input
+              id="quantity"
+              type="number"
+              className="block w-full h-12 px-4 bg-gray-50 leading-7 text-base font-normal shadow border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none"
+              placeholder="Quantity"
+              value={quantity}
+              readOnly
+              required
+            />
+          </div>
         </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Quantity</label>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="stock">
+            Retrieve Amount
+          </label>
           <input
+            id="stock"
             type="number"
-            value={quantity}
-            readOnly
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Retrieve Amount</label>
-          <input
-            type="number"
+            className="block w-full h-12 px-5 bg-gray-50 leading-7 text-base font-normal shadow border border-gray-300 rounded-full focus:outline-none"
+            placeholder="Stock"
             value={retrieveAmount}
             onChange={(e) => setRetrieveAmount(parseInt(e.target.value))}
-            style={styles.input}
           />
         </div>
-        <div style={styles.buttonContainer}>
-          <button style={styles.button} onClick={handleRetrieve}>
-            Retrieve
+        <div className="flex justify-between mb-4">
+          <button
+            type="button"
+            className="w-1/2 h-12 px-4 mt-10 bg-green-600 hover:bg-green-800 transition-all duration-300 rounded-full shadow text-white text-base font-semibold leading-6 mr-2"
+            onClick={handleRetrieve}
+          >
+             Retrieve
           </button>
-          <button style={styles.button} onClick={handleSave}>
+          <button
+            type="button"
+            className="w-1/2 h-12 px-4 mt-10 bg-blue-600 hover:bg-blue-800 transition-all duration-300 rounded-full shadow text-white text-base font-semibold leading-6 ml-2"
+            onClick={handleSave}
+          >
             Save
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
 
-const styles = {
 
-  
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  formContainer: {
-    width: '50%',
-    backgroundColor: 'rgba(133, 193, 233,0.9)',
-    borderRadius: '10px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.8)',
-    padding: '20px',
-    border: '2px solid black', // Add a red border
-    borderColor: 'blue',
-    margin: '10px',
-    textAlign: 'center',
-    position: 'relative', // Add this line for absolute positioning of the line
-  },
-  heading: {
-    fontSize: '3rem',
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginBottom: '20px' // Add margin bottom to create space between heading and form
-  },
-  formGroup: {
-    marginBottom: '1.5rem',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '10px',
-    border: '1px solid rgba(213, 228, 234, 0.8)',
-    borderRadius: '5px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)',
-    color: 'rgba(171, 235, 198, 0.8)',
-    backgroundColor: 'rgba(202, 207, 210, 0.8)',
-  },
-  label: {
-    fontWeight: 'bold',
-    marginBottom: '0.5rem',
-    flexDirection: 'column',
-    fontSize: '1.2rem',
-    color: 'black',
-    textAlign: 'center',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center', 
-    padding: '10px',
-    display: 'block',
-    textTransform: 'uppercase',
-  },
-  input: {
-    width: '100%',
-    padding: '10px',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    backgroundColor: 'white',
-    color: 'black',
-    fontSize: '1.2rem',
-    marginBottom: '10px',
-    textAlign: 'left',
-    display: 'block',
-  },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '20px' // Add margin top to create space between buttons and form
-  },
-  button: {
-    backgroundColor: '#6c3483 ',
-    color: '#ffffff',
-    padding: '10px 20px',
-    borderRadius: '5px',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'background-color 0.8s',
-    marginRight: '10px' // Add margin right to create space between buttons
-  },
-};
 export default RetrieveExistingInventory;
