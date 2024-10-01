@@ -57,8 +57,6 @@ const ReadOneInventory = () => {
   }
 
   return (
-
-
     <div>
       <div className="navbar">
         <NavBar />
@@ -70,10 +68,15 @@ const ReadOneInventory = () => {
           backgroundPosition: 'center',
         }}
       >
-        <div className="bg-primary  min-h-screen flex justify-center items-center p-4 pt-24">
-          <div className="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full">
+        <div className="bg-primary min-h-screen flex justify-center items-center p-4 pt-24">
+           {/* Back button positioned to the left */}
+           <div className="absolute left-[22%] top-[50%] p-4 ">
+              <BackButton destination={`/`} />
+            </div>
+          <div className="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
+           
+            
             <div className="text-center text-2xl mb-6 text-black">Show Inventory</div>
-
             <div className="space-y-4 text-black">
               <div>
                 <span className="font-bold text-blue-500">Item Number:</span>
@@ -137,9 +140,9 @@ const ReadOneInventory = () => {
           </div>
         </div>
       </div>
-      </div>
-
-      );
+    </div>
+  );
+  
 };
       const styles = {
         container: {
