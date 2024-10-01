@@ -89,7 +89,7 @@ export default function InventoryReport({ filteredInventory }) {
 
   return (
     <div>
-      <div className="grid md:grid-cols-2 gap-1 ">
+      <div className="grid md:grid-cols-1 gap-1 ">
         <button
           onClick={() => {
             generatePDF(filteredInventory);

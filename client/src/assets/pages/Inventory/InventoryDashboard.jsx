@@ -162,79 +162,110 @@ const InventoryDashboard = () => {
 
     return (
 
-        <div>
-            <div className="navbar">
-                <NavBar />
-            </div>
-
+        <div className='flex flex-col min-h-screen'>
+        {/* Fixed NavBar at the top */}
+        <NavBar className='fixed top-0 left-0 right-0 z-50 bg-white shadow-md' /> 
+        
+        {/* Add padding to ensure content starts below NavBar */}
+        <div className='flex-grow bg-gray-100 pt-16'>
             <h1 className="text-3xl mb-8 font-bold">Manage Spare Parts</h1>
-
-            <input
-                type="text"
-                placeholder="Search parts..."
-                className="w-5/6 mb-4 p-2 border border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-            />
-
-            <div className="flex justify-end mb-4">
-                <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => window.location.href = '/inventory/create'}>
-                    Add Inventory
-                </button>
-                <div className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4">
-                    <InventoryReport filteredInventory={filteredInventory} />
+            
+            <div className="flex items-center justify-between bg-white h-16 px-4 shadow">
+                <div className="flex space-x-4">
+                    <button
+                        type="button"
+                        className="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+                        onClick={() => window.location.href = '/inventory/create'}>
+                        Add Inventory
+                    </button>
+                    <button
+                        type="button"
+                        className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                        <InventoryReport filteredInventory={filteredInventory} />
+                    </button>
                 </div>
+                
+                <form className="flex items-center max-w-sm">
+                    <label htmlFor="simple-search" className="sr-only">Search</label>
+                    <div className="relative w-full">
+                        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2" />
+                            </svg>
+                        </div>
+                        <input
+                            type="text"
+                            id="simple-search"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-100 dark:border-gray-200 dark:placeholder-gray-700 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+                            placeholder="Search parts..."  
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                        </svg>
+                        <span className="sr-only">Search</span>
+                    </button>
+                </form>
             </div>
+    
+            {/* Table or Spinner */}
             {loading ? (
                 <Spinner />
             ) : (
                 <table className="min-w-full bg-white border border-gray-200 shadow-lg rounded-lg">
-                    <thead>
-                        <tr className="bg-gradient-to-r from-blue-500 to-teal-400 text-white">
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">No</th>
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">Name</th>
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">Location</th>
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">Quantity</th>
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">Purchased Price</th>
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">Sell Price</th>
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Name</th>
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Phone</th>
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Email</th>
-                            <th className="p-4 text-left font-semibold border-b border-gray-300">Operations</th>
+                <thead>
+                    <tr className="bg-gradient-to-r from-blue-500 to-teal-400 text-white">
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">No</th>
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">Name</th>
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">Location</th>
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">Quantity</th>
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">Purchased Price</th>
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">Sell Price</th>
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Name</th>
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Phone</th>
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">Supplier Email</th>
+                        <th className="p-4 text-left font-semibold border-b border-gray-300">Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredInventory.map((inventoryItem, index) => (
+                        <tr key={inventoryItem._id} style={{ background: index % 2 === 0 ? '#f9f9f9' : '#fff' }}>
+                            <td className="p-4 border-b border-gray-300">{index + 1}</td>
+                            <td className="p-4 border-b border-gray-300">{inventoryItem.Name}</td>
+                            <td className="p-4 border-b border-gray-300">{inventoryItem.Location}</td>
+                            <td className="p-4 border-b border-gray-300">{inventoryItem.Quantity}</td>
+                            <td className="p-4 border-b border-gray-300">{inventoryItem.PurchasedPrice}</td>
+                            <td className="p-4 border-b border-gray-300">{inventoryItem.SellPrice}</td>
+                            <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierName}</td>
+                            <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierPhone}</td>
+                            <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierEmail}</td>
+                            <td className="p-4 border-b border-gray-300">
+                                <Link to={`/inventory/edit/${inventoryItem._id}`} className="mr-2">
+                                    <AiOutlineEdit className="inline-block text-blue-500 hover:text-blue-700" />
+                                </Link>
+                                <button onClick={() => handleDelete(inventoryItem._id)} className="mr-2">
+                                    <MdOutlineDelete className="inline-block text-red-500 hover:text-red-700" />
+                                </button>
+                                <Link to={`/inventory/get/${inventoryItem._id}`}>
+                                    <BsInfoCircle className="inline-block text-green-500 hover:text-green-700" />
+                                </Link>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {filteredInventory.map((inventoryItem, index) => (
-                            <tr key={inventoryItem._id} style={{ background: index % 2 === 0 ? '#f9f9f9' : '#fff' }}>
-                                <td className="p-4 border-b border-gray-300">{index + 1}</td>
-                                <td className="p-4 border-b border-gray-300">{inventoryItem.Name}</td>
-                                <td className="p-4 border-b border-gray-300">{inventoryItem.Location}</td>
-                                <td className="p-4 border-b border-gray-300">{inventoryItem.Quantity}</td>
-                                <td className="p-4 border-b border-gray-300">{inventoryItem.PurchasedPrice}</td>
-                                <td className="p-4 border-b border-gray-300">{inventoryItem.SellPrice}</td>
-                                <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierName}</td>
-                                <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierPhone}</td>
-                                <td className="p-4 border-b border-gray-300">{inventoryItem.SupplierEmail}</td>
-                                <td className="p-4 border-b border-gray-300">
-                                    <Link to={`/inventory/edit/${inventoryItem._id}`} className="mr-2">
-                                        <AiOutlineEdit className="inline-block text-blue-500 hover:text-blue-700" />
-                                    </Link>
-                                    <button onClick={() => handleDelete(inventoryItem._id)} className="mr-2">
-                                        <MdOutlineDelete className="inline-block text-red-500 hover:text-red-700" />
-                                    </button>
-                                    <Link to={`/inventory/get/${inventoryItem._id}`}>
-                                        <BsInfoCircle className="inline-block text-green-500 hover:text-green-700" />
-                                    </Link>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                    ))}
+                </tbody>
+            </table>
             )}
-            <Footer />
         </div>
+    
+        {/* Fixed Footer at the bottom */}
+        <Footer className='fixed bottom-0 left-0 right-0 bg-gray-800 text-white text-center py-2' />
+    </div>
+    
 
     );
 };
