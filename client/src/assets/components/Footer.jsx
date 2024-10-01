@@ -5,8 +5,8 @@ const Footer = () => {
     <footer style={{ backgroundColor: "#EAD8B1" }} className="text-black py-8 px-6 ">
       <div className="flex flex-col md:flex-row justify-between items-center">
         <div className="mb-4 md:mb-0">
-          <h2 className="text-lg font-bold">Mr.Automotive</h2>
-          <p>© 2020 Mr.Automotive ltd. All rights reserved</p>
+          <h2 className="text-lg font-bold">Blue Aqua Pets</h2>
+          <p>© 2020 Blue Aqua Pets ltd. All rights reserved</p>
         </div>
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
           <div>
