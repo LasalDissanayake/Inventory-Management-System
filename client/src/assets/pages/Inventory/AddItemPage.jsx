@@ -87,7 +87,7 @@ const AddExistingInventory = () => {
         <div className="grid grid-cols-1 gap-6 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="name">
-              Name
+              Item Name
             </label>
             <input
               id="name"
@@ -101,7 +101,7 @@ const AddExistingInventory = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="quantity">
-              Quantity
+             Current Quantity
             </label>
             <input
               id="quantity"
@@ -117,7 +117,7 @@ const AddExistingInventory = () => {
         
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="stock">
-            Stock
+           Add Stock
           </label>
           <input
             id="stock"

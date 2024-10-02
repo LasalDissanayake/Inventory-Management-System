@@ -73,7 +73,7 @@ const NavBar = () => {
             )}
           </div>
         ) : (
-          <a href="/login">Inventory Manager</a>
+          <a href="/login">Admin</a>
         )}
       </div>
     </nav>
