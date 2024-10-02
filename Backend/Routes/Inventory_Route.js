@@ -1,8 +1,4 @@
-// Importing the Express library
 import express from 'express';
-import Swal from 'sweetalert2'; // Import SweetAlert
-
-// Importing the Inventory model 
 import { Inventory } from '../Models/Inventory.js';
 
 // Creating an Express router
@@ -50,11 +46,8 @@ router.post('/', async (request, response) => {
 
         // Adding the new inventory item to the database
         const inventory = await Inventory.create(newInventory);
-
-        // Sending the created inventory item as a JSON response
         return response.status(201).json(inventory);
     } catch (error) {
-        // Handling errors and sending an error response
         console.error(error.message);
         response.status(500).json({ message: error.message });
     }
@@ -65,14 +58,13 @@ router.get('/', async (request, response) => {
     try {
         // Fetching all inventory items from the database
         const inventory = await Inventory.find({});
-        
+
         // Sending the fetched inventory items as a JSON response
         response.status(200).json({
             count: inventory.length,
             data: inventory
         });
     } catch (error) {
-        // Handling errors and sending an error response
         console.error(error.message);
         response.status(500).json({ message: error.message });
     }
@@ -86,7 +78,7 @@ router.get('/:id', async (request, response) => {
 
         // Fetching a menu item from the database based on the ID
         const inventory = await Inventory.findById(id);
-        
+
         // Sending the fetched menu item as a JSON response
         response.status(200).json(inventory);
     } catch (error) {
@@ -101,7 +93,7 @@ router.put('/:id', async (request, response) => {
     try {
         // Extracting the inventory item ID from the request parameters
         const { id } = request.params;
-        
+
         // Find the inventory item by ID
         const inventory = await Inventory.findById(id);
 
@@ -133,7 +125,7 @@ router.put('/:id', async (request, response) => {
 });
 
 // Route for deleting a inventory item by ID
-router.delete('/:id', async(request, response) => {
+router.delete('/:id', async (request, response) => {
     try {
         // Extracting the menu item ID from the request parameters
         const { id } = request.params;
