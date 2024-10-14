@@ -14,6 +14,7 @@ import AddExistingInventory from './assets/pages/Inventory/AddItemPage';
 import RetrieveExistingInventory from './assets/pages/Inventory/RetrieveItemPage';
 import InventoryDashboard from './assets/pages/Inventory/InventoryDashboard';
 import InventoryReport from './assets/pages/Inventory/InventoryReport';
+import CLogin from './assets/pages/Inventory/cLogin';
 
 const App = () => {
   return (
@@ -28,8 +29,9 @@ const App = () => {
         <Route path='/inventory/get/:id' element={<ReadOneInventory />}></Route>
         <Route path='/inventory/addItem/:id' element={<AddExistingInventory />}></Route>
         <Route path='/inventory/retrieveItem/:id' element={<RetrieveExistingInventory />}></Route>
-        <Route path='/' element={<InventoryDashboard />}></Route>
+        <Route path='/inventoryDashboard' element={<InventoryDashboard />}></Route>
         <Route path='/inventory/InventoryReport' element={<InventoryReport />}></Route>
+        <Route path='/' element={<CLogin />}></Route>
 
 
       </Routes>
